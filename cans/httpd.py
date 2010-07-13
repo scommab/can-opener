@@ -5,15 +5,17 @@ import BaseHTTPServer
 instants = None
 class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
   def do_GET(self):
+    msg = ""
     if self.path: 
       global instants
-      instants.answer(self.path)
+      msg = self.path[1:]
+      instants.answer(msg)
     self.send_response(200)
     self.send_header("Content-type", "text/html")
     self.end_headers()
     r = "<HTML>"
     r += "<BODY>"
-    r += "Text Here"
+    r += "Msg Sent: %s" % msg
     r += "</BODY>"
     r += "</HTML>"
     self.wfile.write(r)
@@ -41,7 +43,10 @@ class Can(Thread):
     self.httpd.server_close()
 
   def stop(self):
+    print "stopping httpd"
     self.running = False
+    self.httpd.server_close()
+    print "stoped httpd"
 
   def setKey(self, key):
     self.key = key

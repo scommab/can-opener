@@ -4,28 +4,36 @@ import sys
 import cans as cans_module
 cans = {}
 
+running = True
 def opener(id, ans):
+  print "opener(%s, \"%s\")" % (id, ans)
   if id not in cans:
 # this shouldn't happen
     return
-  if ans == "q":
-    for c in cans.values():
-      c.stop()
-    sys.exit()
-
-
+  if ans == "quit":
+    print "quiting"
+    global running
+    running = False
 
 key = random.randint(1, sys.maxint)
 print key
 
-can_count = 0
 for a in dir(cans_module):
   if a.startswith("__"):
     continue
-  print "Starting can %s" % a
   mod = getattr(cans_module, a)
   if not hasattr(mod, "Can"):
     continue
-  cans[can_count] = getattr(cans_module, a).Can(can_count, opener, key)
-  cans[can_count].start()
-  can_count += 1
+  print 'Starting can "%s"' % a
+  cans[a] = getattr(cans_module, a).Can(a, opener, key)
+  cans[a].start()
+
+while running:
+  pass
+
+keys = cans.keys()
+for k in keys:
+  print 'Stopping "%s"' % k
+  cans[k].stop()
+  cans[k].join()
+  print "Stoped"
