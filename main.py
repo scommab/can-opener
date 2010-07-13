@@ -23,6 +23,9 @@ for a in dir(cans_module):
   if a.startswith("__"):
     continue
   print "Starting can %s" % a
+  mod = getattr(cans_module, a)
+  if not hasattr(mod, "Can"):
+    continue
   cans[can_count] = getattr(cans_module, a).Can(can_count, opener, key)
   cans[can_count].start()
   can_count += 1
