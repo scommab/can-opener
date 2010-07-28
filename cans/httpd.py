@@ -7,9 +7,7 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
   def do_GET(self):
     msg = ""
     if self.path: 
-      global instants
       msg = self.path[1:]
-      instants.answer(msg)
     self.send_response(200)
     self.send_header("Content-type", "text/html")
     self.end_headers()
@@ -19,7 +17,10 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
     r += "</BODY>"
     r += "</HTML>"
     self.wfile.write(r)
-    self.wfile.close()
+    if msg:
+      global instants
+      instants.answer(msg)
+    return
 
 
 class Can(Thread):
@@ -43,10 +44,8 @@ class Can(Thread):
     self.httpd.server_close()
 
   def stop(self):
-    print "stopping httpd"
     self.running = False
     self.httpd.server_close()
-    print "stoped httpd"
 
   def setKey(self, key):
     self.key = key
@@ -59,7 +58,11 @@ if __name__ == "__main__":
       return
     print ans
     if "q" in ans:
+      print "stopped"
       cans[id].stop()  
   c = Can(1, opener, "non-real")
   cans[c.id] = c
   c.start()
+  print "started"
+  c.join()
+  print "done"

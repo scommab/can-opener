@@ -14,16 +14,7 @@ class Can(Thread):
 
   def run(self):
     while self.running:
-      print "Enter Msg"
-      ans = ""
-      while self.running:
-        r = select.select([sys.stdin], [], [], 0.5)
-        if sys.stdin in r[0]:
-          w = sys.stdin.read(1)
-          ans = (ans + w).strip()
-          print "|%s|" % w
-          if "\n" in w:
-            break
+      ans = raw_input("Enter Msg\n")
       self.opener(self.id, ans)
 
   def stop(self):

@@ -26,6 +26,7 @@ for a in dir(cans_module):
     continue
   print 'Starting can "%s"' % a
   cans[a] = getattr(cans_module, a).Can(a, opener, key)
+  cans[a].daemon = True
   cans[a].start()
 
 while running:
@@ -35,5 +36,4 @@ keys = cans.keys()
 for k in keys:
   print 'Stopping "%s"' % k
   cans[k].stop()
-  cans[k].join()
   print "Stoped"
