@@ -11,10 +11,16 @@ def opener(id, ans):
   if id not in cans:
     # this shouldn't happen
     return
-  if ans == "quit":
+  values = ans.split(" ")
+  if len(values) == 0:
+    return
+  action = values[0]
+  if action == "quit":
     print "quiting"
     global running
     running = False
+  elif action == "open" and len(values) > 1:
+    print " ".join(values[1:])
 
 config = ConfigParser.RawConfigParser()
 config.read('can-opener.cfg')
