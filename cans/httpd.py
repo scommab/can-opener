@@ -24,9 +24,10 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 class Can(Thread):
-  def __init__(self, id, opener, key):
+  def __init__(self, id, config, opener, key):
     Thread.__init__(self)
     self.key = key
+    self.config = config
     self.id = id
     self.opener = opener
     self.running = True

@@ -2,18 +2,22 @@
 import random
 import sys
 import cans as cans_module
+import ConfigParser
 cans = {}
 
 running = True
 def opener(id, ans):
   print "opener(%s, \"%s\")" % (id, ans)
   if id not in cans:
-# this shouldn't happen
+    # this shouldn't happen
     return
   if ans == "quit":
     print "quiting"
     global running
     running = False
+
+config = ConfigParser.RawConfigParser()
+config.read('can-opener.cfg')
 
 key = random.randint(1, sys.maxint)
 print key
@@ -25,7 +29,7 @@ for a in dir(cans_module):
   if not hasattr(mod, "Can"):
     continue
   print 'Starting can "%s"' % a
-  cans[a] = getattr(cans_module, a).Can(a, opener, key)
+  cans[a] = getattr(cans_module, a).Can(a, config, opener, key)
   cans[a].daemon = True
   cans[a].start()
 

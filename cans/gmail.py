@@ -3,22 +3,20 @@ from threading import Thread
 import sys
 import imaplib
 import time
-import ConfigParser
 
 class Can(Thread):
-  def __init__(self, id, opener, key):
+  def __init__(self, id, config, opener, key):
     Thread.__init__(self)
     self.key = key
+    self.config = config
     self.id = id
     self.opener = opener
     self.running = True
     pass
 
   def run(self):
-    config = ConfigParser.RawConfigParser()
-    config.read('gmail.cfg')
-    user = config.get('email', 'username')
-    passwd =config.get('email', 'password')
+    user = self.config.get('email', 'username')
+    passwd = self.config.get('email', 'password')
 
     while self.running:
       m = imaplib.IMAP4_SSL('imap.gmail.com')
