@@ -15,15 +15,19 @@ class Can(Thread):
     pass
 
   def run(self):
-    user = self.config.get('email', 'username')
-    passwd = self.config.get('email', 'password')
+    try:
+      user = self.config.get('email', 'username')
+      passwd = self.config.get('email', 'password')
+    except:
+      # failed look up: abore running
+      return
 
     while self.running:
       m = imaplib.IMAP4_SSL('imap.gmail.com')
       m.login(user, passwd)
       count = m.select('Inbox')[1][0]
       r, messages = m.search(None, '(UNSEEN)')
-      print messages
+      #print messages
       for uid in messages[0].split(" "):
         r, data = m.fetch(uid, '(ENVELOPE)')
         data = data[0]
@@ -31,8 +35,8 @@ class Can(Thread):
         if str(self.key) in subject:
           r, body = m.fetch(uid, '(BODY[TEXT])')
           body = body[0][1].strip()
-          print subject
-          print body
+          #print subject
+          #print body
           self.opener(self.id, body)
       m.logout()
       time.sleep(15)
