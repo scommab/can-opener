@@ -26,8 +26,6 @@ def opener(id, ans):
   for opener in openers.values():
     if opener.match(action):
       opener.open(params)
-  #elif action == "open" and len(values) > 1:
-  #  print " ".join(values[1:])
 
 config = ConfigParser.RawConfigParser()
 config.read('can-opener.cfg')
