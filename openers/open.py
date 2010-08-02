@@ -1,8 +1,4 @@
-
-from threading import Thread
-import sys
-import imaplib
-import time
+import webbrowser
 
 class Opener():
   def __init__(self, id, config):
@@ -13,4 +9,4 @@ class Opener():
     return name == "open"
 
   def open(self, params):
-    print params
+    webbrowser.open(params)

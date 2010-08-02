@@ -1,13 +1,14 @@
 
 from threading import Thread
 import BaseHTTPServer
+import urllib
 
 instants = None
 class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
   def do_GET(self):
     msg = ""
     if self.path: 
-      msg = self.path[1:]
+      msg = urllib.unquote(self.path[1:])
     self.send_response(200)
     self.send_header("Content-type", "text/html")
     self.end_headers()
